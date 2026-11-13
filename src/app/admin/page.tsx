@@ -66,6 +66,20 @@ export default function AdminPage() {
     fetchData(password);
   }
 
+  async function unpairSubmission(sub: Submission) {
+    // Give the submission a unique name based on its original answers so it becomes its own group
+    let originalName = "";
+    if (sub.form === "parent" && sub.answers.a_name) {
+      originalName = sub.answers.a_name;
+    } else if (sub.form === "student") {
+      originalName = [sub.answers.a_first, sub.answers.a_last].filter(Boolean).join(" ");
+    }
+    const uniqueName = originalName
+      ? `${originalName} (${sub.form})`
+      : `${sub.form}-${sub.id.slice(0, 6)}`;
+    await reassignSubmission(sub.id, uniqueName);
+  }
+
   async function reassignSubmission(subId: string, newStudentName: string) {
     const res = await fetch("/api/submissions", {
       method: "PATCH",
@@ -191,7 +205,7 @@ export default function AdminPage() {
                   <div style={styles.col}>
                     <h3 style={styles.colTitle}>Parent Screener</h3>
                     {fam.parent ? (
-                      <DraggableSubmission sub={fam.parent} groupKey={key} dragData={dragData} />
+                      <DraggableSubmission sub={fam.parent} groupKey={key} dragData={dragData} showUnpair={!!fam.student} onUnpair={() => unpairSubmission(fam.parent!)} />
                     ) : (
                       <p style={styles.muted}>Not yet submitted</p>
                     )}
@@ -199,7 +213,7 @@ export default function AdminPage() {
                   <div style={styles.col}>
                     <h3 style={styles.colTitle}>Student Screener</h3>
                     {fam.student ? (
-                      <DraggableSubmission sub={fam.student} groupKey={key} dragData={dragData} />
+                      <DraggableSubmission sub={fam.student} groupKey={key} dragData={dragData} showUnpair={!!fam.parent} onUnpair={() => unpairSubmission(fam.student!)} />
                     ) : (
                       <p style={styles.muted}>Not yet submitted</p>
                     )}
@@ -218,10 +232,14 @@ function DraggableSubmission({
   sub,
   groupKey,
   dragData,
+  showUnpair,
+  onUnpair,
 }: {
   sub: Submission;
   groupKey: string;
   dragData: React.MutableRefObject<{ subId: string; fromGroup: string } | null>;
+  showUnpair: boolean;
+  onUnpair: () => void;
 }) {
   const [dragging, setDragging] = useState(false);
 
@@ -242,8 +260,19 @@ function DraggableSubmission({
       }}
     >
       <div style={styles.dragBar}>
-        <span style={styles.dragIcon}>↕</span>
-        Drag to move to another family
+        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={styles.dragIcon}>↕</span>
+          Drag to move
+        </span>
+        {showUnpair && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onUnpair(); }}
+            style={styles.unpairBtn}
+            title="Remove from this family and make a separate entry"
+          >
+            Unpair
+          </button>
+        )}
       </div>
       <SubmissionDetail sub={sub} />
     </div>
@@ -360,8 +389,9 @@ const styles: Record<string, React.CSSProperties> = {
 
   draggable: { cursor: "grab", borderRadius: 10, padding: "10px 12px", border: "1.5px dashed #D5DFE4", transition: "border-color .15s, opacity .15s, background .15s", background: "#FAFCFD" },
   dragging: { opacity: 0.4, borderColor: "#2D7D8A", background: "#E3F1F2" },
-  dragBar: { display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "#7A8B9A", padding: "6px 8px", marginBottom: 8, background: "#F3F7F8", borderRadius: 8, cursor: "grab", userSelect: "none" as const },
+  dragBar: { display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, fontWeight: 600, color: "#7A8B9A", padding: "6px 8px", marginBottom: 8, background: "#F3F7F8", borderRadius: 8, cursor: "grab", userSelect: "none" as const },
   dragIcon: { fontSize: 14, fontWeight: 700 },
+  unpairBtn: { font: "inherit", fontSize: 11, fontWeight: 600, color: "#c33", background: "#fff", border: "1px solid #e5c5c5", borderRadius: 6, padding: "3px 10px", cursor: "pointer" },
 
   reportSection: { marginBottom: 12 },
   reportTitle: { margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#1F3B57" },
