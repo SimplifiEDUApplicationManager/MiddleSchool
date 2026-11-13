@@ -241,7 +241,10 @@ function DraggableSubmission({
         ...(dragging ? styles.dragging : {}),
       }}
     >
-      <div style={styles.dragHandle}>⠿</div>
+      <div style={styles.dragBar}>
+        <span style={styles.dragIcon}>↕</span>
+        Drag to move to another family
+      </div>
       <SubmissionDetail sub={sub} />
     </div>
   );
@@ -355,9 +358,10 @@ const styles: Record<string, React.CSSProperties> = {
   muted: { color: "#7A8B9A", fontSize: 14 },
   dateLine: { fontSize: 13, color: "#7A8B9A", margin: "0 0 10px" },
 
-  draggable: { cursor: "grab", borderRadius: 10, padding: "8px 10px", border: "1px dashed transparent", transition: "border-color .15s, opacity .15s", position: "relative" as const },
-  dragging: { opacity: 0.4, borderColor: "#2D7D8A" },
-  dragHandle: { position: "absolute" as const, top: 8, right: 6, fontSize: 16, color: "#D5DFE4", cursor: "grab", userSelect: "none" as const, lineHeight: 1 },
+  draggable: { cursor: "grab", borderRadius: 10, padding: "10px 12px", border: "1.5px dashed #D5DFE4", transition: "border-color .15s, opacity .15s, background .15s", background: "#FAFCFD" },
+  dragging: { opacity: 0.4, borderColor: "#2D7D8A", background: "#E3F1F2" },
+  dragBar: { display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "#7A8B9A", padding: "6px 8px", marginBottom: 8, background: "#F3F7F8", borderRadius: 8, cursor: "grab", userSelect: "none" as const },
+  dragIcon: { fontSize: 14, fontWeight: 700 },
 
   reportSection: { marginBottom: 12 },
   reportTitle: { margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#1F3B57" },
