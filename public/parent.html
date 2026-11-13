@@ -1,0 +1,341 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Family Intake — Simplifi EDU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one calm card per screen, a slim section stepper on top, sticky footer nav. */
+:root{
+  --bg:#EEF3F4; --card:#FFFFFF; --ink:#1F3B57; --ink-soft:#4E6378; --muted:#7A8B9A;
+  --line:#D5DFE4; --tint:#F3F7F8; --accent:#2D7D8A; --accent-ink:#FFFFFF; --pick:#E3F1F2;
+  --sun:#E8A33D; --sun-soft:#FBF0DD; --proto:#FFF7E6; --proto-ink:#7A5310; --logo-bg:transparent; --logo-pad:0;
+  --display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --body:"Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A22; --card:#16242F; --ink:#E4EDF2; --ink-soft:#AFC0CC; --muted:#8094A3;
+  --line:#2A3C49; --tint:#1B2D39; --accent:#5FB3BF; --accent-ink:#0B1A20; --pick:#1D3A42;
+  --sun:#F0B85E; --sun-soft:#3A2E18; --proto:#2C2414; --proto-ink:#F1CD8A; --logo-bg:#ffffff; --logo-pad:3px 6px; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A22; --card:#16242F; --ink:#E4EDF2; --ink-soft:#AFC0CC; --muted:#8094A3;
+  --line:#2A3C49; --tint:#1B2D39; --accent:#5FB3BF; --accent-ink:#0B1A20; --pick:#1D3A42;
+  --sun:#F0B85E; --sun-soft:#3A2E18; --proto:#2C2414; --proto-ink:#F1CD8A; --logo-bg:#ffffff; --logo-pad:3px 6px; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 120px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:640px;margin:0 auto}
+.proto{margin:14px 0 0;background:var(--proto);color:var(--proto-ink);border-radius:10px;padding:8px 12px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between}
+.proto button{background:none;border:0;color:inherit;font:inherit;font-weight:600;text-decoration:underline;cursor:pointer;padding:0}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:14px 0 10px}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.brand .logo{height:22px;width:auto;display:block;background:var(--logo-bg);padding:var(--logo-pad);border-radius:6px}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
+.steps div{min-width:0}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+.steps span{display:block;font-size:11px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em}
+.steps .on span{color:var(--ink);font-weight:600}
+.left{font-size:12px;color:var(--muted);margin-top:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;margin-top:8px}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);font-weight:700}
+h1,h2{font-family:var(--display);font-weight:600;text-wrap:balance;margin:6px 0 8px;line-height:1.2}
+h1{font-size:clamp(28px,6vw,36px)} h2{font-size:clamp(23px,5vw,28px)}
+.lede{color:var(--ink-soft);margin:0 0 6px;max-width:60ch}
+.stack{display:grid;gap:22px;margin-top:22px}
+.q label.ql,.q .ql{display:block;font-weight:600;margin-bottom:3px}
+.hint{font-size:13px;color:var(--muted);margin:0 0 8px}
+.opt{color:var(--muted);font-weight:500;font-size:13px}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:var(--tint);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+textarea{min-height:84px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{font:inherit;font-size:15px;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:99px;padding:8px 14px;cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed=true]{background:var(--pick);border-color:var(--accent);font-weight:600}
+.other{margin-top:8px}
+.grows{display:grid;gap:8px;margin-top:6px}
+.avail{display:grid;grid-template-columns:52px repeat(3,minmax(0,1fr));gap:6px;margin-top:8px;align-items:center}
+.avail .d{font-weight:700;font-size:14px}
+.avail .h{font-size:12px;color:var(--muted);text-align:center;font-weight:600}
+.avail button{font:inherit;font-size:13px;color:var(--ink);background:var(--tint);border:1.5px solid transparent;border-radius:10px;padding:10px 4px;cursor:pointer;min-width:0}
+.avail button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.avail button:hover{border-color:var(--accent)}
+.grow{display:grid;grid-template-columns:minmax(0,1fr) 120px 36px;gap:8px;align-items:center}
+.grow .x{font:inherit;font-size:18px;color:var(--muted);background:none;border:0;cursor:pointer;padding:6px}
+.addrow{font:inherit;font-size:14px;font-weight:600;color:var(--accent);background:none;border:0;cursor:pointer;padding:6px 0;justify-self:start}
+/* rating statements */
+.stmt{border-top:1px solid var(--line);padding-top:16px}
+.stmt:first-child{border-top:0;padding-top:0}
+.stmt p{margin:0 0 10px}
+.stmt .num{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em;margin-right:6px}
+.scale{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.scale button{font:inherit;font-size:13px;line-height:1.2;color:var(--ink);background:var(--tint);border:1.5px solid transparent;border-radius:10px;padding:10px 4px;cursor:pointer;min-width:0}
+.scale button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.scale button:hover{border-color:var(--accent)}
+.count{font-size:13px;color:var(--muted);margin-top:18px}
+.note{background:var(--sun-soft);border-radius:12px;padding:12px 14px;font-size:15px}
+.pickrow{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}
+.pickrow[aria-pressed=true]{background:var(--pick);border-color:var(--accent)}
+.badge{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:700}
+.pickrow[aria-pressed=true] .badge{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.picks{display:grid;gap:8px}
+footer.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+footer .in{max-width:640px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.btn{font:inherit;font-weight:600;border-radius:12px;padding:12px 18px;cursor:pointer;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);margin-left:auto;min-width:140px}
+.save{font-size:13px;color:var(--muted);background:none;border:0;cursor:pointer;font:inherit;text-decoration:underline}
+.toast{font-size:13px;color:var(--accent);font-weight:600}
+/* coach view */
+.coach{margin-top:18px;border:1px dashed var(--line);border-radius:14px;padding:18px}
+.rows{display:grid;gap:7px;margin-top:12px}
+.row{display:grid;grid-template-columns:minmax(0,190px) 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.row .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .track{height:12px;background:var(--tint);border-radius:99px;overflow:hidden}
+.row .track i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.row.lead .t{font-weight:700} .row.lead .track i{background:var(--sun)}
+.row .v{font-variant-numeric:tabular-nums;text-align:right;color:var(--ink-soft)}
+.flags{display:grid;gap:6px;margin-top:14px;font-size:14px}
+.flags div{background:var(--tint);border-radius:8px;padding:8px 10px}
+@media (max-width:460px){.row{grid-template-columns:1fr 44px;row-gap:3px}.row .t{grid-column:1/-1;white-space:normal}.card{padding:22px 16px}.scale button{font-size:12px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><img class="logo" src="data:image/png;base64,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" alt="Simplifi EDU"><span>Middle School Mastery</span></div>
+    <div class="steps" id="steps"></div>
+    <div class="left" id="left"></div>
+  </header>
+  <main id="screen"></main>
+</div>
+<footer class="nav"><div class="in">
+  <button class="btn" id="back" type="button">Back</button>
+  <button class="save" id="saveBtn" type="button">Save and finish later</button>
+  <span class="toast" id="toast" aria-live="polite"></span>
+  <button class="btn primary" id="next" type="button">Next</button>
+</div></footer>
+
+<script>
+const SECTIONS=[["A","About"],["B","Patterns"],["C","Strengths"],["D","School"],["E","Home"],["F","Final"]];
+const SCALE=["Rarely","Sometimes","Often","Almost always"];
+const PARTS=[
+ [1,"Remembering and keeping track","Holding on to assignments, materials, and the small things that need to happen.",[
+  ["1a","When a teacher announces a quiz or project in class and you find out later that it slipped through the cracks, their response is often, “I didn’t know we had that.”"],
+  ["1b","Does the homework but then leaves it at home, so it never gets turned in."],
+  ["1d","Loses track partway through a task, like forgetting the next step in a multi-step math problem."],
+  ["1c","Needs repeated reminders to do what they’re supposed to do."]]],
+ [2,"Sensing and managing time","Judging how long things take, and noticing time as it passes.",[
+  ["2a","Chronically underestimates how long things take, or is shocked by how late it is when trying to complete a task."],
+  ["2b","Says “I have plenty of time,” then panics right at the deadline."],
+  ["2c","Loses whole afternoons or runs late without noticing the passage of time."]]],
+ [3,"Getting started","Moving from “I should do this” to actually beginning the work.",[
+  ["3a","Sits down to work but can’t get started; the blank page wins."],
+  ["3b","Doesn’t want to sit down and puts off starting (not finishing); big projects sit untouched."],
+  ["3c","Works fine once actually in motion, so the struggle is almost all at the beginning."]]],
+ [4,"Sorting what matters most","Deciding what comes first, and mapping out the steps to get there.",[
+  ["4a","Gets visibly overwhelmed by the sheer volume of work."],
+  ["4b","Does the easy, low-stakes task while an important deadline is ignored."],
+  ["4c","Can’t say what matters most right now; everything feels equally urgent."]]],
+ [5,"Keeping things organized","Papers, supplies, workspaces, and digital files: knowing where things live.",[
+  ["5a","Loose papers get stuffed wherever they fit, so graded work and permission slips are hard to track down."],
+  ["5b","Can’t find what they need when they need it, like a worksheet, a charger, or a file on the computer."],
+  ["5c","Their homework spot gets so cluttered that just getting set up eats into work time."]]],
+ [6,"Staying with it","Keeping attention on a task long enough to finish it.",[
+  ["6a","Drifts off partway through homework, even on work they know how to do."],
+  ["6b","Gets pulled away easily by a phone, a sibling, a noise, or a new idea."],
+  ["6c","Starts strong but leaves a trail of half-finished tasks."]]],
+ [7,"Pausing before acting","Stopping to think before saying, doing, or turning something in.",[
+  ["7a","Rushes through work to be done with it, skipping directions or making careless mistakes."],
+  ["7b","Blurts things out or acts in the moment, then wishes they hadn’t."],
+  ["7c","Makes snap decisions they later regret, like picking a project topic in seconds or saying yes to plans without checking what’s due."]]],
+ [8,"Handling big feelings","Keeping frustration, worry, or disappointment from taking over the work.",[
+  ["8a","A small setback, like a confusing problem or one low quiz grade, sets off a big reaction."],
+  ["8b","Has a hard time hearing feedback or corrections on their work without getting defensive or upset."],
+  ["8c","Takes a long time to settle back down after getting upset."]]],
+ [9,"Rolling with changes","Adjusting when plans change or the first approach isn’t working.",[
+  ["9a","Gets thrown off by surprises in the school day, like a substitute, a moved due date, or a schedule switch."],
+  ["9b","Has trouble switching gears from one subject or activity to the next, like going from math homework to reading."],
+  ["9c","Gets frustrated when a group project means doing things someone else’s way."]]],
+ [10,"Sticking with a goal","Keeping effort going toward something that pays off later.",[
+  ["10a","Talks excitedly about a goal, like raising a grade or making a team, but the effort fades within a week or two."],
+  ["10b","Finds it hard to put in effort today for something that won’t pay off for weeks."],
+  ["10c","Gives up on longer projects when the finish line feels far away."]]],
+ [11,"Stepping back to check","Looking back over work and noticing what is and isn’t working.",[
+  ["11a","Turns work in without looking it over first."],
+  ["11b","Is genuinely surprised by grades, and thought the test or project went fine."],
+  ["11c","Has trouble saying what went wrong, or what they’d try differently next time."]]]
+];
+const ALLSTMT={};PARTS.forEach(p=>p[3].forEach(s=>ALLSTMT[s[0]]=s[1]));
+
+const STEPS=[
+ {sec:null,kind:"welcome",min:0},
+ {sec:"A",title:"About your student",lede:"Please provide a little background on your student.",min:2,fields:[
+  {id:"a_name",t:"text",q:"Student’s first and last name"},
+  {id:"a_grade",t:"text",q:"Grade"},
+  {id:"a_school",t:"text",q:"School"},
+  {id:"a_you",t:"text",q:"Your first and last name"},
+  {id:"a_rel",t:"single",q:"Your relationship to the student",o:["Mom","Dad","Grandparent","Guardian","Other"],other:"Other"},
+  {id:"a_plat",t:"multi",q:"Online school platforms",hint:"Select which portal your school uses for grades and homework.",o:["Google Classroom","Canvas","Schoology","Other"],other:"Other"},
+  {id:"a_plan",t:"single",q:"Does your child use a planner right now?",o:["Paper planner","An app or digital calendar","Not really"]},
+  {id:"a_504",t:"single",q:"Any school supports in place, such as a 504 plan or IEP?",optional:1,o:["Yes","In progress","No","Not sure"]},
+  {id:"a_learn",t:"long",q:"Anything else about how your child learns that would help us?",hint:"Such as an evaluation or diagnosis. Share only what you’re comfortable with, this is entirely optional."},
+  {id:"a_past",t:"long",q:"Has your child had tutoring, coaching, or other support before? If so, what helped and what didn’t?"}
+ ]},
+ ...PARTS.map(p=>({sec:"B",kind:"part",part:p,min:.6})),
+ {sec:"B",kind:"top3",min:.5},
+ {sec:"C",title:"Where your child shines",lede:"Strengths matter as much as struggles. Your coach builds on what already works, and kids notice when someone sees the good stuff.",min:1.5,fields:[
+  {id:"c_str",t:"multi",max:3,q:"Pick up to three that sound most like your child.",o:["Kind and caring with others","Creative or artistic","Curious, asks a lot of questions","Great sense of humor","Works hard when something matters to them","Loves building or making things","Loves to read","Athletic or active","A good friend, works well with others","Honest about how things are going","Great with animals or younger kids","Brave about trying new things","Bounces back after a hard day","Asks for help when stuck"]},
+  {id:"c_love",t:"long",q:"What does your child love, or light up talking about?",hint:"Hobbies, interests, favorite subjects, anything."},
+  {id:"c_good",t:"long",q:"When school goes well for your child, what is usually different?",hint:"A certain teacher, subject, time of day, or setup."}
+ ]},
+ {sec:"D",title:"How school is going right now",lede:"We like to start from what the school already tracks, rather than adding new work for your family. This gives us a starting point to look back on later.",min:2,fields:[
+  {id:"d_miss",t:"single",q:"About how many missing or late assignments right now?",o:["None","1 to 2","3 to 5","6 or more","Not sure"]},
+  {id:"d_well",t:"long",q:"Which classes are going well?"},
+  {id:"d_hard",t:"long",q:"Which classes are the biggest struggle?"},
+  {id:"d_grades",t:"grades",q:"In those classes, what are the current grades?",hint:"Add each class you listed above. A letter or percentage is fine."},
+  {id:"d_pull",t:"multi",q:"What seems to be pulling those grades down the most?",hint:"Pick any that apply.",o:["Homework","Quizzes","Tests","All three","Not sure"]},
+  {id:"d_rosy",t:"single",q:"When you ask how school is going, how does your child’s answer compare with what you see in grades or the portal?",o:["Pretty close","A little better than it really is","A lot better than it really is","More worried than they need to be"]},
+  {id:"d_share",t:"single",q:"Would you be comfortable sharing a recent progress report or portal view with your coach?",o:["Yes","Maybe, let’s talk","No"]}
+ ]},
+ {sec:"E",title:"Homework at home",lede:"Where and how the work happens matters as much as the work itself. Small changes at home often make a big difference.",min:1.5,fields:[
+  {id:"e_where",t:"single",q:"Where does homework usually happen?",o:["Own room","Kitchen or shared space","It moves around","Other"],other:"Other"},
+  {id:"e_when",t:"single",q:"When does it usually start?",o:["Right after school","After a break","After dinner","It varies a lot"]},
+  {id:"e_phone",t:"single",q:"Where is the phone during homework?",o:["Put away","Nearby","In hand","No phone"]},
+  {id:"e_who",t:"long",q:"Who helps or checks in at home, and how does that usually go?"},
+  {id:"e_battle",t:"single",q:"Does homework time often turn into a battle?",o:["Yes","Sometimes","No"]},
+  {id:"e_reach",t:"single",q:"Coaches send a couple of quick check-ins between sessions. What’s the easiest way to reach your child?",hint:"A parent is always copied.",o:["Text","Email","Through a parent","Not sure yet"]}
+ ]},
+ {sec:"F",title:"In your own words",lede:"Last stretch. A few open questions, in your own words.",min:2,fields:[
+  {id:"f_dis",t:"long",q:"What is the biggest struggle for your child right now?"},
+  {id:"f_strong",t:"single",q:"Does schoolwork often bring up strong frustration, anxiety, avoidance, or shutting down?",o:["Yes","Sometimes","No"],note:{when:["Yes","Sometimes"],text:"Thank you for sharing that. We start by helping your child feel steady before we build any systems. That always comes first."}},
+  {id:"f_change",t:"long",q:"If your child could change one thing about school right now, what do you think they would pick?",hint:"Their goal matters most here, and it may differ from yours. That’s normal."},
+  {id:"f_win",t:"long",q:"What would feel like a real win by the end of this semester?"}
+ ]},
+ {sec:"F",title:"Last step: scheduling",lede:"Sessions are twice a week, one hour each. Tell us every time that could work, and we'll find two that fit.",min:1,fields:[
+  {id:"g_tz",t:"single",q:"Your time zone",o:["Eastern","Central","Mountain","Pacific","Other"],other:"Other"},
+  {id:"g_slots",t:"avail",q:"When could sessions happen?",hint:"Pick as many as you like. More options mean a faster tutor match."},
+  {id:"g_note",t:"long",optional:1,q:"Anything else about timing?",hint:"Exact start times, days that change week to week, or dates you'll be away."}
+ ]},
+ {sec:null,kind:"done",min:0}
+];
+
+const KEY="msm-parent-v1";
+let st={i:0,a:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&typeof s.i==="number")st=s}catch(e){}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+
+function renderTop(){
+  const step=STEPS[st.i];
+  $("#steps").innerHTML=SECTIONS.map(([k,l])=>{
+    const idx=STEPS.map((s,i)=>s.sec===k?i:-1).filter(i=>i>=0);
+    const first=idx[0],last=idx[idx.length-1];
+    let pct=st.i>last?100:st.i<first?0:Math.round((st.i-first+1)/idx.length*100);
+    if(step.kind==="done")pct=100;
+    return `<div class="${step.sec===k?"on":""}"><div class="bar"><i style="width:${pct}%"></i></div><span>${l}</span></div>`}).join("");
+  const rem=STEPS.slice(st.i).reduce((t,s)=>t+s.min,0);
+  $("#left").textContent=step.kind==="done"?"All done":step.kind==="welcome"?"About 20 minutes":`About ${Math.max(1,Math.round(rem))} min left`;
+  $("#back").style.visibility=st.i===0?"hidden":"visible";
+  $("#saveBtn").hidden=step.kind==="welcome"||step.kind==="done";
+  $("#next").textContent=step.kind==="welcome"?"Let’s begin":step.kind==="done"?"Back to start":STEPS[st.i+1].kind==="done"?"Finish":"Next";
+}
+
+function chips(f){
+  const v=st.a[f.id]; const multi=f.t==="multi"; const sel=multi?(v||[]):v;
+  let h=`<div class="chips" role="group" aria-label="${esc(f.q)}">`+f.o.map(o=>{
+    const on=multi?sel.includes(o):sel===o;
+    return `<button type="button" class="chip" data-f="${f.id}" data-v="${esc(o)}" aria-pressed="${on}">${esc(o)}</button>`}).join("")+`</div>`;
+  if(f.other&&(multi?sel.includes(f.other):sel===f.other))
+    h+=`<input class="other" type="text" id="${f.id}_other" data-text="${f.id}_other" placeholder="Tell us more" value="${esc(st.a[f.id+"_other"])}">`;
+  if(f.note&&f.note.when.includes(v))h+=`<p class="note" style="margin:10px 0 0">${esc(f.note.text)}</p>`;
+  return h;
+}
+function field(f){
+  const opt=f.optional?` <span class="opt">Optional</span>`:"";
+  const hint=f.hint?`<p class="hint">${esc(f.hint)}</p>`:"";
+  if(f.t==="text")return `<div class="q"><label class="ql" for="${f.id}">${esc(f.q)}${opt}</label>${hint}<input type="text" id="${f.id}" data-text="${f.id}" value="${esc(st.a[f.id])}"></div>`;
+  if(f.t==="avail"){const sel=st.a[f.id]||[];const wk=["3 to 5 pm","5 to 7 pm","7 to 9 pm"],we=["Morning","Afternoon","Evening"];
+    const row=(d,opts)=>`<span class="d">${d}</span>`+opts.map(o=>{const k=d+" "+o;return `<button type="button" data-av="${f.id}" data-v="${esc(k)}" aria-pressed="${sel.includes(k)}" aria-label="${esc(k)}">${o}</button>`}).join("");
+    return `<div class="q"><span class="ql">${esc(f.q)}</span>${hint}<div class="avail"><span></span>${wk.map(w=>`<span class="h">${w}</span>`).join("")}${["Mon","Tue","Wed","Thu","Fri"].map(d=>row(d,wk)).join("")}<span></span>${we.map(w=>`<span class="h">${w}</span>`).join("")}${["Sat","Sun"].map(d=>row(d,we)).join("")}</div><p class="count">${sel.length} time${sel.length===1?"":"s"} picked</p></div>`;}
+  if(f.t==="grades"){const rows=(st.a[f.id]&&st.a[f.id].length)?st.a[f.id]:[{c:"",g:""}];
+    return `<div class="q"><span class="ql">${esc(f.q)}</span>${hint}<div class="grows">`+rows.map((r,i)=>`<div class="grow"><input type="text" id="${f.id}_c${i}" data-gr="${f.id}|${i}|c" placeholder="Class" aria-label="Class ${i+1}" value="${esc(r.c)}"><input type="text" id="${f.id}_g${i}" data-gr="${f.id}|${i}|g" placeholder="Grade" aria-label="Grade ${i+1}" value="${esc(r.g)}">${rows.length>1?`<button type="button" class="x" data-delrow="${f.id}|${i}" aria-label="Remove class ${i+1}">×</button>`:"<span></span>"}</div>`).join("")+(rows.length<6?`<button type="button" class="addrow" data-addrow="${f.id}">+ Add another class</button>`:"")+`</div></div>`;}
+  if(f.t==="long")return `<div class="q"><label class="ql" for="${f.id}">${esc(f.q)}${opt}</label>${hint}<textarea id="${f.id}" data-text="${f.id}">${esc(st.a[f.id])}</textarea></div>`;
+  return `<div class="q"><span class="ql">${esc(f.q)}${opt}</span>${hint}${chips(f)}</div>`;
+}
+
+function render(){
+  const s=STEPS[st.i]; let h="";
+  if(s.kind==="welcome"){
+    h=`<section class="card"><p class="eyebrow">Family intake</p><h1>Getting to know your student</h1>
+    <p class="lede">Please provide a little background on your student. Every Simplifi EDU plan is personalized to fit your child. This snapshot helps us start in the right place and focus on what is actually getting in the way day to day.</p>
+    <div class="stack">
+      <p class="lede" style="margin:0">This snapshot covers six short sections: background, everyday habits, strengths, how school is going, homework at home, and your goals, plus your availability. Most kids have a mix of things that come easily and things that take more effort, so expect to see both.</p>
+      <div class="note"><b>A few quick tips.</b> Answer based on what you've observed with your child over the last month or so, and go with your first instinct. If a statement doesn’t fit your child at all, pick Rarely and move on. You can save and come back anytime.</div>
+    </div></section>`;
+  } else if(s.kind==="part"){
+    const [n,t,sub,items]=s.part;
+    const done=items.filter(x=>st.a[x[0]]).length;
+    h=`<section class="card"><p class="eyebrow">Everyday patterns · ${n} of 11</p><h2>${esc(t)}</h2><p class="lede">${esc(sub)}</p>
+    <p class="hint" style="margin-top:6px">How often does this sound like your child?</p>
+    <div class="stack">`+items.map(([id,txt])=>`<div class="stmt"><p>${esc(txt)}</p>
+      <div class="scale" role="group" aria-label="How often: ${id}">${SCALE.map((l,k)=>`<button type="button" data-r="${id}" data-v="${k+1}" aria-pressed="${st.a[id]===k+1}">${l}</button>`).join("")}</div></div>`).join("")+
+    `</div><p class="count">${done} of ${items.length} answered</p></section>`;
+  } else if(s.kind==="top3"){
+    let pool=Object.keys(ALLSTMT).filter(k=>(st.a[k]||0)>=3);
+    const showAll=pool.length<3; if(showAll)pool=Object.keys(ALLSTMT);
+    const picks=st.a.top3||[];
+    h=`<section class="card"><p class="eyebrow">Everyday patterns · Your top three</p><h2>Which three feel most true this week?</h2>
+    <p class="lede">${showAll?"Tap three statements, starting with the one that feels most true.":"Here are the statements you marked Often or Almost always. Tap three, starting with the one that feels most true."}</p>
+    <div class="picks" style="margin-top:18px">`+pool.map(k=>{const p=picks.indexOf(k);return `<button type="button" class="pickrow" data-pick="${k}" aria-pressed="${p>=0}"><span class="badge">${p>=0?p+1:""}</span><span>${esc(ALLSTMT[k])}</span></button>`}).join("")+`</div></section>`;
+  } else if(s.kind==="done"){
+    h=`<section class="card"><p class="eyebrow">All done</p><h1>Thank you. That's everything.</h1>
+    <p class="lede">Our team reviews this with you and builds a plan tailored to your child. This snapshot is only a starting point for the conversation, never a label, and the plan will keep evolving as we learn what genuinely helps.</p>
+    <p class="hint" style="margin-top:14px">Our coaching approach draws on the executive skills research of Peg Dawson and Richard Guare. This snapshot was written by Simplifi EDU.</p>
+    <div class="note" style="margin-top:16px"><span>${esc(sendMsg||"Your answers have been saved.")}</span></div></section>`;
+  } else {
+    h=`<section class="card"><p class="eyebrow">Section ${s.sec}</p><h2>${esc(s.title)}</h2><p class="lede">${esc(s.lede)}</p><div class="stack">${s.fields.map(field).join("")}</div></section>`;
+  }
+  $("#screen").innerHTML=h; renderTop();
+}
+
+
+document.addEventListener("click",e=>{
+  const c=e.target.closest(".chip");
+  if(c){const f=findField(c.dataset.f),v=c.dataset.v;
+    if(f.t==="multi"){let a=st.a[f.id]||[];if(a.includes(v))a=a.filter(x=>x!==v);else{if(f.max&&a.length>=f.max)a=a.slice(1);a=[...a,v]}st.a[f.id]=a}
+    else st.a[f.id]=st.a[f.id]===v?undefined:v;
+    persist();render();focusSame(`.chip[data-f="${f.id}"][data-v="${CSS.escape(v)}"]`);return}
+  const r=e.target.closest("[data-r]");
+  if(r){const id=r.dataset.r;st.a[id]=+r.dataset.v;persist();render();
+    const next=document.querySelector(".stmt:has(.scale button[aria-pressed=true]) ~ .stmt:not(:has(button[aria-pressed=true]))");
+    focusSame(`[data-r="${id}"][data-v="${r.dataset.v}"]`);
+    if(next&&window.matchMedia("(max-width:700px)").matches)next.scrollIntoView({behavior:"smooth",block:"center"});return}
+  const p=e.target.closest("[data-pick]");
+  if(p){let a=st.a.top3||[];const k=p.dataset.pick;if(a.includes(k))a=a.filter(x=>x!==k);else if(a.length<3)a=[...a,k];st.a.top3=a;persist();render();focusSame(`[data-pick="${k}"]`);return}
+});
+document.addEventListener("input",e=>{const k=e.target.dataset.text;if(k){st.a[k]=e.target.value;persist();return}
+  const gr=e.target.dataset.gr;if(gr){const [id,i,c]=gr.split("|");const rows=(st.a[id]&&st.a[id].length)?st.a[id]:[{c:"",g:""}];rows[+i][c]=e.target.value;st.a[id]=rows;persist()}});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-av]");if(!b)return;const id=b.dataset.av,v=b.dataset.v;let arr=st.a[id]||[];arr=arr.includes(v)?arr.filter(x=>x!==v):[...arr,v];st.a[id]=arr;persist();render();const n=document.querySelector(`[data-av="${id}"][data-v="${CSS.escape(v)}"]`);if(n)n.focus({preventScroll:true});});
+document.addEventListener("click",e=>{const a=e.target.closest("[data-addrow]");const d=e.target.closest("[data-delrow]");
+  if(a){const id=a.dataset.addrow;const rows=(st.a[id]&&st.a[id].length)?st.a[id]:[{c:"",g:""}];rows.push({c:"",g:""});st.a[id]=rows;persist();render();const n=document.getElementById(id+"_c"+(rows.length-1));if(n)n.focus();}
+  if(d){const [id,i]=d.dataset.delrow.split("|");st.a[id].splice(+i,1);persist();render();}});
+function focusSame(sel){const el=document.querySelector(sel);if(el)el.focus({preventScroll:true})}
+function findField(id){for(const s of STEPS)for(const f of (s.fields||[]))if(f.id===id)return f}
+function go(d){st.i=Math.min(STEPS.length-1,Math.max(0,st.i+d));persist();render();window.scrollTo({top:0})}
+$("#next").onclick=()=>{if(STEPS[st.i].kind==="done"){st.i=0;sendMsg="";persist();render();window.scrollTo({top:0})}else{const fin=STEPS[st.i+1].kind==="done";go(1);if(fin)submitResults()}};
+let sendMsg="";const FORM="parent";
+async function submitResults(){sendMsg="Saving your answers...";render();
+  try{const res=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({form:FORM,answers:JSON.parse(JSON.stringify(st.a))})});
+    if(!res.ok)throw new Error("Failed");sendMsg="Saved! Thank you for completing the intake.";}
+  catch(e){sendMsg="Something went wrong saving your answers. Please try again or contact your Simplifi coordinator.";}
+  render();}
+
+$("#back").onclick=()=>go(-1);
+$("#saveBtn").onclick=()=>{persist();$("#toast").textContent="Saved. Come back anytime.";setTimeout(()=>$("#toast").textContent="",2600)};
+render();
+</script>
+
+</body></html>
