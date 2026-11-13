@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { scoreParent, scoreStudent } from "@/lib/scoring";
 import type { ParentResult, StudentResult } from "@/lib/scoring";
 
@@ -26,6 +26,8 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState<string | null>(null);
+  const dragData = useRef<{ subId: string; fromGroup: string } | null>(null);
 
   const fetchData = useCallback(async (pw: string) => {
     setLoading(true);
@@ -62,6 +64,22 @@ export default function AdminPage() {
     e.preventDefault();
     sessionStorage.setItem("admin-pw", password);
     fetchData(password);
+  }
+
+  async function reassignSubmission(subId: string, newStudentName: string) {
+    const res = await fetch("/api/submissions", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": password,
+      },
+      body: JSON.stringify({ id: subId, student_name: newStudentName }),
+    });
+    if (res.ok) {
+      setSubmissions((prev) =>
+        prev.map((s) => (s.id === subId ? { ...s, student_name: newStudentName } : s))
+      );
+    }
   }
 
   // Group submissions by student name
@@ -121,6 +139,7 @@ export default function AdminPage() {
         <span style={styles.headerCount}>{families.length} {families.length === 1 ? "family" : "families"}</span>
         <button onClick={() => fetchData(password)} style={styles.btnSmall}>Refresh</button>
       </header>
+      <p style={styles.hint}>Drag a Parent or Student card to another family to fix a mismatch.</p>
 
       {families.length === 0 && (
         <p style={styles.empty}>No submissions yet. Share the screener links to get started.</p>
@@ -129,8 +148,30 @@ export default function AdminPage() {
       {families.map((fam) => {
         const key = fam.studentName.toLowerCase();
         const isOpen = expanded === key;
+        const isDropTarget = dragOver === key;
         return (
-          <div key={key} style={styles.familyCard}>
+          <div
+            key={key}
+            style={{
+              ...styles.familyCard,
+              ...(isDropTarget ? styles.familyCardDropTarget : {}),
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              if (dragData.current && dragData.current.fromGroup !== key) {
+                setDragOver(key);
+              }
+            }}
+            onDragLeave={() => setDragOver(null)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragOver(null);
+              if (dragData.current && dragData.current.fromGroup !== key) {
+                reassignSubmission(dragData.current.subId, fam.studentName);
+              }
+              dragData.current = null;
+            }}
+          >
             <button onClick={() => setExpanded(isOpen ? null : key)} style={styles.familyHeader}>
               <div>
                 <strong style={styles.familyName}>{fam.studentName}</strong>
@@ -150,7 +191,7 @@ export default function AdminPage() {
                   <div style={styles.col}>
                     <h3 style={styles.colTitle}>Parent Screener</h3>
                     {fam.parent ? (
-                      <SubmissionDetail sub={fam.parent} />
+                      <DraggableSubmission sub={fam.parent} groupKey={key} dragData={dragData} />
                     ) : (
                       <p style={styles.muted}>Not yet submitted</p>
                     )}
@@ -158,7 +199,7 @@ export default function AdminPage() {
                   <div style={styles.col}>
                     <h3 style={styles.colTitle}>Student Screener</h3>
                     {fam.student ? (
-                      <SubmissionDetail sub={fam.student} />
+                      <DraggableSubmission sub={fam.student} groupKey={key} dragData={dragData} />
                     ) : (
                       <p style={styles.muted}>Not yet submitted</p>
                     )}
@@ -169,6 +210,39 @@ export default function AdminPage() {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function DraggableSubmission({
+  sub,
+  groupKey,
+  dragData,
+}: {
+  sub: Submission;
+  groupKey: string;
+  dragData: React.MutableRefObject<{ subId: string; fromGroup: string } | null>;
+}) {
+  const [dragging, setDragging] = useState(false);
+
+  return (
+    <div
+      draggable
+      onDragStart={() => {
+        dragData.current = { subId: sub.id, fromGroup: groupKey };
+        setDragging(true);
+      }}
+      onDragEnd={() => {
+        setDragging(false);
+        dragData.current = null;
+      }}
+      style={{
+        ...styles.draggable,
+        ...(dragging ? styles.dragging : {}),
+      }}
+    >
+      <div style={styles.dragHandle}>⠿</div>
+      <SubmissionDetail sub={sub} />
     </div>
   );
 }
@@ -258,12 +332,14 @@ const styles: Record<string, React.CSSProperties> = {
   error: { color: "#c33", fontSize: 14, margin: 0 },
 
   page: { maxWidth: 1100, margin: "0 auto", padding: "20px 16px 60px", fontFamily: "Figtree, system-ui, sans-serif", color: "#1F3B57" },
-  header: { display: "flex", alignItems: "center", gap: 14, marginBottom: 20, flexWrap: "wrap" as const },
+  header: { display: "flex", alignItems: "center", gap: 14, marginBottom: 6, flexWrap: "wrap" as const },
   headerTitle: { margin: 0, fontSize: 24, fontWeight: 600 },
   headerCount: { fontSize: 14, color: "#7A8B9A", fontWeight: 500 },
+  hint: { fontSize: 13, color: "#7A8B9A", margin: "0 0 16px" },
   empty: { color: "#7A8B9A", fontSize: 15 },
 
-  familyCard: { background: "#fff", border: "1px solid #D5DFE4", borderRadius: 14, marginBottom: 12, overflow: "hidden" },
+  familyCard: { background: "#fff", border: "2px solid #D5DFE4", borderRadius: 14, marginBottom: 12, overflow: "hidden", transition: "border-color .15s, box-shadow .15s" },
+  familyCardDropTarget: { borderColor: "#2D7D8A", boxShadow: "0 0 0 3px rgba(45,125,138,.2)" },
   familyHeader: { width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 18px", background: "none", border: "none", font: "inherit", cursor: "pointer", textAlign: "left" as const },
   familyName: { fontSize: 17, color: "#1F3B57" },
   badges: { display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" as const },
@@ -278,6 +354,10 @@ const styles: Record<string, React.CSSProperties> = {
   colTitle: { margin: "0 0 10px", fontSize: 15, fontWeight: 600, color: "#2D7D8A", textTransform: "uppercase" as const, letterSpacing: "0.05em" },
   muted: { color: "#7A8B9A", fontSize: 14 },
   dateLine: { fontSize: 13, color: "#7A8B9A", margin: "0 0 10px" },
+
+  draggable: { cursor: "grab", borderRadius: 10, padding: "8px 10px", border: "1px dashed transparent", transition: "border-color .15s, opacity .15s", position: "relative" as const },
+  dragging: { opacity: 0.4, borderColor: "#2D7D8A" },
+  dragHandle: { position: "absolute" as const, top: 8, right: 6, fontSize: 16, color: "#D5DFE4", cursor: "grab", userSelect: "none" as const, lineHeight: 1 },
 
   reportSection: { marginBottom: 12 },
   reportTitle: { margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#1F3B57" },
